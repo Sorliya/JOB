@@ -6,20 +6,20 @@ import java.util.Iterator;
 
 public class SortedName {
     public void sortFile(){
-        // 首先是定义要读取的文件的文件名以及之后要写入的文件的文件名
+        // The first is to define the filename of the file to be read and the filename of the file to be written afterwards
         String filePath = this.getClass().getResource("/").getPath() + "unsorted-names-list.txt";
         String newFilePath = this.getClass().getResource("/").getPath() + "sorted-names-list.txt";
 
-        // 定义文件输入流和文件输出流
-        // 文件输入流用于从文件中读取内容
-        // 文件输出流用于将排序后的内容写入到新文件中
+        // Define file input stream and file output stream
+        // A file input stream is used to read content from a file
+        // The file output stream is used to write the sorted content to a new file
         File file = new File(filePath);
         InputStream is = null;
         Reader reader = null;
         BufferedReader bufferedReader = null;
         BufferedWriter bw = null;
         try{
-            // 定义一个list集合，用于存放从文件中读取的内容
+            // Define a list collection to store the content read from the file
             ArrayList<String> list = new ArrayList<>();
             is = new FileInputStream(file);
             reader = new InputStreamReader(is);
@@ -29,38 +29,38 @@ public class SortedName {
                 list.add(line);
             }
 
-            // 使用Collections这个类的sort方法来对list这个集合排序
-            // 排序后的内容就是之后需要被写入到新文件中的内容
+            // Use the sort method of the Collections class to sort the list collection
+            // The sorted content is the content that needs to be written to the new file later
             Collections.sort(list, new Comparator<String>(){
                 public int compare(String a, String b){
-                    // 排序规则：
-                    // 首先用lastName进行排序，lastName是每一行的最后一个字符串所以使用lastIndexOf来定位到那个字符串
-                    // 如果lastName不相同，则排序成功，如果lastName相同则需要用firstName进行排序
+                    // Sorting Rules:
+                    // First sort by lastName, lastName is the last string of each line so use lastIndexOf to locate that string
+                    // If the lastName is not the same, the sorting is successful, if the lastName is the same, you need to use the firstName to sort
                     String lastName_a = a.substring(a.lastIndexOf(" "));
                     String lastName_b = b.substring(b.lastIndexOf(" "));
 
                     if(!lastName_a.equals(lastName_b)){
                         return lastName_a.compareTo(lastName_b);
                     }
-                    // 使用firstName进行排序
+                    // Sort by firstName
                     return a.compareTo(b);
                 }
             });
 
-            // 使用for循环来将list里面的元素输出到屏幕中
-            // list中的元素现在是有序的
+            // Use a for loop to output the elements in the list to the screen
+            // Elements in list are now ordered
             for(int i = 0; i < list.size(); i++){
                 System.out.println(list.get(i));
             }
 
-            // 使用文件输出流将排好序的文件内容写入到新文件中
+            // Write the sorted file contents to a new file using the file output stream
             bw = new BufferedWriter(new FileWriter(newFilePath));
 
-            // 一行一行进行写入，每写入一行内容同时换行
+            // Write line by line, and wrap each line at the same time
             Iterator<String> it = list.iterator();
             while(it.hasNext()){
                 bw.write(it.next().toString());
-                // 换行操作
+                // newline operation
                 bw.newLine();
             }
         }catch(Exception e){
